@@ -1,0 +1,2 @@
+class SStock < ApplicationRecord
+end
