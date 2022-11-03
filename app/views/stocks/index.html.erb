@@ -1,3 +1,5 @@
+
+
 <%# <%
 
   def getOpenValue(date)
@@ -19,18 +21,15 @@
 
 <h1>S&P500</h1>
 
-<%= area_chart @stocks.group_by_year(:date).pluck(:date, :open) %>
+<%= area_chart @stocks.group_by_year(:date).pluck(:date, :open), colors:["#8AFFC9"], label: "Price"%>
 
 
 <div class="datepickerDiv">
-  <span>From: <input type="text" id="datepicker1"></span>
-  <span>To: <input type="text" id="datepicker2"></span>
-  <span><button id="calculateBtn">Calculate</button></span>
+  <span><input type="text" id="datepicker1" hint="From"></span>
+  <span><input type="text" id="datepicker2" hint="To"></span>
+  <span><button id="calculateBtn">Calculate 📈</button></span>
 </div>
 
-<div class="showDate">
-  <p id="date1"></p>
-</div>
 
 <%# <%
   d1 = '2002.10.10'
@@ -38,10 +37,13 @@
 %>
 
 <div class="inflation">
+  <div id="date1"></div>
   <div id="dateValidness"></div>
   <div id="inflation"></div>
-  <div id="wikimedia"></div>
 
+
+
+  <%# <div id="wikimedia"></div> %>
 
   <%# <div id="compareToGrowth"> Growth during that period of time <%= compareToGrowth('2002.10.10', '2015.10.10')
   %>

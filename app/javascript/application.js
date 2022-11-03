@@ -3,18 +3,19 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "chartkick"
 import "Chart.bundle"
+
 //= require jquery
 //= require jquery_ujs
 
 const inflation = {
     2000: 3.4,
-    2001: 2.8,
+    2001: 4.5,
     2002: 1.6,
     2003: 2.3,
-    2004: 2.7,
+    2004: 1.2,
     2005: 3.4,
-    2006: 3.2,
-    2007: 2.8,
+    2006: 1.1,
+    2007: 2.9,
     2008: 3.8,
     2009: -0.4,
     2010: 1.6,
@@ -22,14 +23,14 @@ const inflation = {
     2012: 2.1,
     2013: 1.5,
     2014: 1.6,
-    2015: 0.1,
+    2015: 0.7,
     2016: 1.3,
     2017: 2.1,
     2018: 2.4,
     2019: 1.8,
     2020: 1.2,
     2021: 4.7,
-    2022: 8.2
+    2022: 8.8
 }
 
 const button = document.getElementById('calculateBtn');
@@ -57,30 +58,35 @@ async function myFunction() {
 
     console.log(dateFrom);
     console.log(dateTo);
-    
+
     const dateFromD = new Date(dateFrom);
     const dateToD = new Date(dateTo);
 
     console.log(dateFromD);
     console.log(dateToD);
 
-    document.getElementById("date1").innerHTML = "From " + dateFrom + " To " + dateTo;
+    document.getElementById("date1").innerHTML = "You've selected: From " + dateFrom + " To " + dateTo;
     if (datesValid(dateFromD, dateToD)) {
         // var response = getWiki(dateFromD);
+        document.getElementById("dateValidness").innerHTML = "";
+        if(dateFrom === dateTo) {
+            document.getElementById("inflation").innerHTML = "That's the same day";
+        } else {
+            var inflationByTime = inflationCalc(dateFrom, dateTo);
+            document.getElementById("inflation").innerHTML = "Inflation during that time period: " + inflationByTime + "%";
+            // document.getElementById("dateFromHoliday").innerHTML = 
+            // document.getElementById("dateToHoliday").innerHTML =
+        }
 
-
-        var inflationByTime = inflationCalc(dateFrom, dateTo);
-
-        document.getElementById("inflation").innerHTML = "Inflation during that time period: " + inflationByTime + "%";
         
-
     } else {
         document.getElementById("dateValidness").innerHTML = "Dates aren't valid";
+        document.getElementById("inflation").innerHTML = "";
     }
 }
 
 function datesValid(dateFrom, dateTo) {
-    if (dateFrom < dateTo) {
+    if (dateFrom <= dateTo) {
         return true;
     } else {
         return false;
