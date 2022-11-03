@@ -77,17 +77,19 @@
 </div>
 <div class="inflation">
   <% if datesValid('2021.10.10', '2022.10.10') %>
-    <div id="compare"><%= compareToGrowth('2002.10.10', '2022.10.10')%></div>
-    <div id="inflationCalc"><%= inflationCalc(2000, 2012)%></div>
+    <div id="compare"> Stock growth from 2002.10.10 Till 2022.10.10: (example) <%= compareToGrowth('2002.10.10', '2022.10.10')%></div>
+    <div id="inflationCalc">Inflation from 2000 Till 2012 (example) <%= inflationCalc(2000, 2012)%></div>
   <% else %>
     <span>Data not valid</span>
     
   <% end %>
 </div>
 
+<div class="showDate">
+  <p id="date1"></p>
+</div>
 
 
-<p id="demo"> </p>
 
 <script> 
   const button = document.getElementById('calculateBtn');
@@ -96,9 +98,13 @@
 
   var dateFrom = $("#datepicker1").datepicker({}).val();
   var dateTo = $("#datepicker2").datepicker({ }).val();
-  document.getElementById('calculateBtn').onclick = function() {
-    document.getElementById("demo").innerHTML = dateFrom;
-  };
+  document.getElementById('calculateBtn').addEventListener("click", myFunction);
+
+  function myFunction() {
+    dateFrom = $("#datepicker1").datepicker({}).val();
+    dateTo = $("#datepicker2").datepicker({ }).val();
+    document.getElementById("date1").innerHTML = "From " + dateFrom + " To " + dateTo;
+}
   
   
 
