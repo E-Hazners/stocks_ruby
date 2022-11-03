@@ -13,3 +13,22 @@
  *= require_tree .
  *= require_self
  */
+h1 {
+  text-align: center;
+}
+
+.datepickerDiv {
+  text-align: center;
+}
+
+.logo span {
+  display: inline;
+  vertical-align: top;
+}
+
+.inflation {
+  text-align: center;
+  padding: 50;
+}
+
+

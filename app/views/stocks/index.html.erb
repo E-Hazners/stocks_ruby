@@ -1,14 +1,105 @@
 <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#datepicker1" ).datepicker({
+      changeYear: true,
+      yearRange: "2000:2022",
+      changeMonth: true
+    })
+      
+  } );
+  $( function() {
+    $( "#datepicker2" ).datepicker({
+      changeYear: true,
+      yearRange: "2000:2022",
+      changeMonth: true
+    });
+  } );
+</script>
+
+<%
+
+  def datesValid(date1, date2)
+    if date1 < date2
+      return true
+    else
+      return false
+    end
+  end
+
+  def setDates(date1, date2)
+
+  end
+
+  def inflationCalc(date1, date2)
+    sum = 1
+    minus = date2 - date1
+    if date1 > date2
+      return "Can't calculate because date 'From' can't be after 'To'"
+    else
+      minus.times {
+        sum += @inflation[date1]
+      }
+    end
+    return sum.round(2);
+  end
+
+  def getOpenValue(date)
+    data = @stocks.find_by("date=?", DateTime.parse(date))
+    return data.open
+  end
+
+  def compareToGrowth(date1, date2)
+    if datesValid(date1, date2)
+
+      value1 = getOpenValue(date1)
+      value2 = getOpenValue(date2)
+      return value2 - value1
+    else
+      return "Can't calculate"
+    end
+  end
+%>
+
 
 <h1>S&P500</h1>
 
-<%= area_chart @stocks.group_by_year(:open).count %>
+<%= area_chart @stocks.group_by_year(:date).pluck(:date, :open) %>
 
-<ul>
-    <% @stocks.each do |stock| %>
-        <li>
-          <%= stock.date.strftime('%d/%m/%y') %> |
-          <%= stock.open%> 
-        </li>
-    <% end %>
-</ul>
+
+<div class="datepickerDiv">
+  <span>From: <input type="text" id="datepicker1"></span>
+  <span>To: <input type="text" id="datepicker2"></span>
+  <span><button id="calculateBtn">Calculate</button></span>
+</div>
+<div class="inflation">
+  <% if datesValid('2021.10.10', '2022.10.10') %>
+    <div id="compare"><%= compareToGrowth('2002.10.10', '2022.10.10')%></div>
+    <div id="inflationCalc"><%= inflationCalc(2000, 2012)%></div>
+  <% else %>
+    <span>Data not valid</span>
+    
+  <% end %>
+</div>
+
+
+
+<p id="demo"> </p>
+
+<script> 
+  const button = document.getElementById('calculateBtn');
+
+  let elementClicked = false;
+
+  var dateFrom = $("#datepicker1").datepicker({}).val();
+  var dateTo = $("#datepicker2").datepicker({ }).val();
+  document.getElementById('calculateBtn').onclick = function() {
+    document.getElementById("demo").innerHTML = dateFrom;
+  };
+  
+  
+
+</script>
