@@ -1,28 +1,4 @@
-<%
-  def datesValid(date1, date2)
-    if date1 < date2
-      return true
-    else
-      return false
-    end
-  end
-
-  def setDates(date1, date2)
-
-  end
-
-  def inflationCalc(date1, date2)
-    sum = 1
-    minus = date2 - date1
-    if date1 > date2
-      return "Can't calculate because date 'From' can't be after 'To'"
-    else
-      minus.times {
-        sum += @inflation[date1]
-      }
-    end
-    return sum.round(2);
-  end
+<%# <%
 
   def getOpenValue(date)
     data = @stocks.find_by("date=?", DateTime.parse(date))
@@ -30,14 +6,13 @@
   end
 
   def compareToGrowth(date1, date2)
-    if datesValid(date1, date2)
+    value1 = getOpenValue(date1)
+    value2 = getOpenValue(date2)
+    return (value2 - value1).round(2)
+  end
 
-      value1 = getOpenValue(date1)
-      value2 = getOpenValue(date2)
-      return value2 - value1
-    else
-      return "Can't calculate"
-    end
+  def growthInPercents(date1, date2)
+    return (date2[0, 5].to_i - date1[0, 5].to_i)/date1[0, 5].to_i * 100
   end
 %>
 
@@ -53,17 +28,24 @@
   <span><button id="calculateBtn">Calculate</button></span>
 </div>
 
-<div class="inflation">
-  <% if datesValid('2021.10.10', '2022.10.10') %>
-    <div id="compare"> Stock growth from 2002.10.10 Till 2022.10.10: (example) <%= compareToGrowth('2002.10.10', '2022.10.10')%></div>
-    <div id="inflationCalc">Inflation from 2000 Till 2012 (example) <%= inflationCalc(2000, 2012)%>%</div>
-  <% else %>
-    <span>Data not valid</span>
-  <% end %>
-</div>
-
 <div class="showDate">
   <p id="date1"></p>
+</div>
+
+<%# <%
+  d1 = '2002.10.10'
+  d2 = '2015.10.10'
+%>
+
+<div class="inflation">
+  <div id="dateValidness"></div>
+  <div id="inflation"></div>
+  <div id="wikimedia"></div>
+
+
+  <%# <div id="compareToGrowth"> Growth during that period of time <%= compareToGrowth('2002.10.10', '2015.10.10')
+  %>
+  <%# <div id="compareToGrowth"> In percents: <%= growthInPercents('2015.10.10', '2015.10.10')</div> %>
 </div>
 
 
@@ -72,30 +54,3 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-<script> 
-  const button = document.getElementById('calculateBtn');
-
-  let elementClicked = false;
-
-  var dateFrom = $("#datepicker1").datepicker({
-      changeYear: true,
-      yearRange: "2000:2022",
-      changeMonth: true
-      }).val();
-  var dateTo = $("#datepicker2").datepicker({
-    changeYear: true,
-      yearRange: "2000:2022",
-      changeMonth: true
-  }).val();
-  document.getElementById('calculateBtn').addEventListener("click", myFunction);
-
-  function myFunction() {
-    dateFrom = $("#datepicker1").datepicker({}).val();
-    dateTo = $("#datepicker2").datepicker({}).val();
-    document.getElementById("date1").innerHTML = "From " + dateFrom + " To " + dateTo;
-}
-
-  
-
-</script>
