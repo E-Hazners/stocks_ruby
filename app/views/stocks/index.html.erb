@@ -1,27 +1,4 @@
-<%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script>
-  $( function() {
-    $( "#datepicker1" ).datepicker({
-      changeYear: true,
-      yearRange: "2000:2022",
-      changeMonth: true
-    })
-      
-  } );
-  $( function() {
-    $( "#datepicker2" ).datepicker({
-      changeYear: true,
-      yearRange: "2000:2022",
-      changeMonth: true
-    });
-  } );
-</script>
-
 <%
-
   def datesValid(date1, date2)
     if date1 < date2
       return true
@@ -75,13 +52,13 @@
   <span>To: <input type="text" id="datepicker2"></span>
   <span><button id="calculateBtn">Calculate</button></span>
 </div>
+
 <div class="inflation">
   <% if datesValid('2021.10.10', '2022.10.10') %>
     <div id="compare"> Stock growth from 2002.10.10 Till 2022.10.10: (example) <%= compareToGrowth('2002.10.10', '2022.10.10')%></div>
-    <div id="inflationCalc">Inflation from 2000 Till 2012 (example) <%= inflationCalc(2000, 2012)%></div>
+    <div id="inflationCalc">Inflation from 2000 Till 2012 (example) <%= inflationCalc(2000, 2012)%>%</div>
   <% else %>
     <span>Data not valid</span>
-    
   <% end %>
 </div>
 
@@ -91,18 +68,31 @@
 
 
 
+<%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
 <script> 
   const button = document.getElementById('calculateBtn');
 
   let elementClicked = false;
 
-  var dateFrom = $("#datepicker1").datepicker({}).val();
-  var dateTo = $("#datepicker2").datepicker({ }).val();
+  var dateFrom = $("#datepicker1").datepicker({
+      changeYear: true,
+      yearRange: "2000:2022",
+      changeMonth: true
+      }).val();
+  var dateTo = $("#datepicker2").datepicker({
+    changeYear: true,
+      yearRange: "2000:2022",
+      changeMonth: true
+  }).val();
   document.getElementById('calculateBtn').addEventListener("click", myFunction);
 
   function myFunction() {
     dateFrom = $("#datepicker1").datepicker({}).val();
-    dateTo = $("#datepicker2").datepicker({ }).val();
+    dateTo = $("#datepicker2").datepicker({}).val();
     document.getElementById("date1").innerHTML = "From " + dateFrom + " To " + dateTo;
 }
   
