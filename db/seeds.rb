@@ -10,7 +10,7 @@ CSV.foreach(Rails.root.join('./lib/csvs/SP500.csv'), headers: true) do |row|
   date = Date.strptime(row[0], '%m/%d/%y')
 
   SStock.create({
-    date: date.strftime('%y/%m/%d')
+    date: date.strftime('%y/%m/%d'),
     open: row[1],
     high: row[2],
     low: row[3],
